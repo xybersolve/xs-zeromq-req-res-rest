@@ -1,4 +1,4 @@
-# zeromq-request-response
+# xs-zeromq-request-response
 
 > Lightweight microservice communication between an Express REST API service
 and backend worker service using zeromq.
@@ -9,7 +9,7 @@ which syncs senders resolve on zeromq reply via `message` event. `requestor-p`
 is reusable in other microservices.
 
 2) server2.js: (inline) Express `response` is directly queued in `pending`
-object and synced to on zeromq reply via `message` event. This is an in-line 
+object and synced to on zeromq reply via `message` event. This is an in-line
 solution and not reusable.
 
 > Notes: In both models `requestID` is generated and used as key in queued
