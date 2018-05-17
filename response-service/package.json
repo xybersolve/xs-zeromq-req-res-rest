@@ -1,0 +1,15 @@
+{
+  "name": "@xybersolve/zeromq-http-responder",
+  "version": "1.0.0",
+  "description": "Zeromq responder",
+  "main": "responder.js",
+  "scripts": {
+    "start": "node ./responder.js",
+    "respond": "node ./responder.js"
+  },
+  "author": "Greg Milligan <xybersolve@gmail.com>",
+  "license": "MIT",
+  "dependencies": {
+    "zeromq": "^4.6.0"
+  }
+}

@@ -1,0 +1,38 @@
+version: '2'
+services:
+  requestor:
+    command: npm start
+    build:
+      context: ${REQUEST_CONTEXT}
+      dockerfile: ${REQUEST_DOCKERFILE}
+    image: ${REQUEST_IMAGE}:${VERSION}
+    container_name: ${REQUEST_CONTAINER}
+    ports:
+      - "${HTTP_PORT}:${HTTP_PORT}"
+    environment:
+      - ZMQ_RES_ADDRESS=tcp://responder:${ZMQ_PORT}
+      - HTTP_PORT=${HTTP_PORT}
+    networks:
+      - backend
+
+  responder:
+    command: npm start
+    build:
+      context: ${RESPONSE_CONTEXT}
+      dockerfile: ${RESPONSE_DOCKERFILE}
+      # args:
+      #   ZMQ_PORT: ${ZMQ_PORT}
+    image: ${RESPONSE_IMAGE}:${VERSION}
+    #image: ${RESPONSE_IMAGE}:${GITHASH}
+    container_name: ${RESPONSE_CONTAINER}
+    ports:
+      - "${ZMQ_PORT}:${ZMQ_PORT}"
+    environment:
+      - ZMQ_REQ_ADDRESS=tcp://*:${ZMQ_PORT}
+      - ZMQ_PORT=${ZMQ_PORT}
+    networks:
+      - backend
+
+networks:
+  backend:
+    driver: bridge
