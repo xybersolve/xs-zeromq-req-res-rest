@@ -1,7 +1,7 @@
 {
   "name": "@xybersolve/zeromq-http-responder",
   "version": "1.0.0",
-  "description": "Zeromq responder",
+  "description": "ZeroMQ responder",
   "main": "responder.js",
   "scripts": {
     "start": "node ./responder.js",

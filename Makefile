@@ -41,10 +41,6 @@ down: ## Clean up requestor & server
 	${INFO} "Taking 'down' $(PROJECT)..."
 	@docker-compose -p $(PROJECT) down
 
-ssh: ## SSH into container
-	${INFO} "SSH into zeromq-req-res-http..."
-	@docker run -it --rm zeromq-req-res-http /bin/bash
-
 show: ## Show docker machine host name, ip & http port
 	@echo $(HOST_NAME):$(HOST_IP):$(HTTP_PORT)
 
@@ -55,8 +51,3 @@ ping: ## Call ping REST endpoint
 increment: ## Call increment REST endpoint
 	${INFO} "Calling microservice endpoint: /increment/15..."
 	@curl http://$(HOST_IP):$(HTTP_PORT)/increment/15
-
-help: ## This help file
-	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) \
-	| sort \
-	| awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-20s\033[0m %s\n", $$1, $$2}'

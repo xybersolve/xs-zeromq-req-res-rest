@@ -1,14 +1,15 @@
-# xs-zeromq-request-response
+# xs-zeromq-request-response-rest
 
 > Lightweight microservice communication between an Express REST API endpoint
-service and backend worker service using zeromq.
+service and backend worker service using zeromq. ZeroMQ request is wrapped
+in promise, using two methods below.
 
-### Two Models (reusable promise and inline):
-1) server.js : promise based requestor-p retains `resolve` in `pending` object,
+### Two Promise Methods (reusable promise and inline):
+1) `server.js` : promise based requestor-p retains `resolve` in `pending` object,
 which syncs senders resolve on zeromq reply via `message` event. `requestor-p`
 is reusable in other microservices.
 
-2) server2.js: (inline) Express `response` is directly queued in `pending`
+2) `server2.js`: (inline) Express `response` is directly queued in `pending`
 object and synced to on zeromq reply via `message` event. This is an in-line
 solution and not reusable.
 
@@ -48,14 +49,16 @@ $ curl http://<docker-machine ip>:8082/increment/15
 ### Makefile help
 ```sh
 
-$ make help
 archive              Archive images
 build                Build requestor & responder images
 clean                Clean up requestor & responder
-help                 This help file
-run                  Run requestor & responder in daemon mode
-ssh                  SSH into container
-up                   Run requestor & responder in live mode
+down                 Down for Docker Compose project
+increment            Call the increment REST endpoint
+ping                 Call the ping REST endpoint
+run                  Run REST, requestor & responder services as daemons
+show                 Show the Docker Machine Host Name & IP
+stop                 Hard stop of containers
+up                   Run requestor & responder in live mode (view logs)
 
 ```
 

@@ -1,8 +1,8 @@
 {
   "name": "@xybersolve/zeromq-http-requestor",
   "version": "1.0.0",
-  "description": "REST Servie - makes request to zeromq, wrapped in promise",
-  "main": "server2.js",
+  "description": "REST Service - makes request to zeromq response service, wrapped in promise",
+  "main": "requestor.js",
   "scripts": {
     "start": "node ./server.js",
     "server": "node ./server.js",
