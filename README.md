@@ -1,7 +1,7 @@
 # xs-zeromq-request-response
 
-> Lightweight microservice communication between an Express REST API service
-and backend worker service using zeromq.
+> Lightweight microservice communication between an Express REST API endpoint
+service and backend worker service using zeromq.
 
 ### Two Models (reusable promise and inline):
 1) server.js : promise based requestor-p retains `resolve` in `pending` object,
