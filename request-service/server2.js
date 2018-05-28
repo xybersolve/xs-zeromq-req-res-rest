@@ -20,36 +20,30 @@ console.log(`
 `)
 
 const app = express();
-//const requestor = zmq.socket('req');
-//const request = requestor.connect(zeromq_address);
 const requestor = zmq.socket('req').connect(zeromq_address);
 const pending = {};
-const message = 'from express';
 
+// zeromq
 requestor.connect(zeromq_address);
 requestor.on('message', (data) => {
-  //console.log('got zeromq reply');
-  process.stdout.write('server2: got zeromq reply');
   data = JSON.parse(data);
   if(! pending[data.requestId]) {
-    process.stdout.write('server2: got orphaned pending response');
-    //console.error('server2: got orphaned pending resesponse')
+    console.error('Error: got orphaned pending response');
     return;
   }
   pending[data.requestId].send(data);
   delete pending[data.requestId];
 })
 
+// REST routes
 app.get('/ping', (req, res) => {
-  //console.log('sending request');
-  process.stdout.write(`server2: got REST request, send zeromq request`);
   const recieved = getTime();
   const requestId = randUUID();
   pending[requestId] = res;
   const data = {
     action: 'ping',
     requestId,
-    message,
+    message: 'pong',
     recieved
   };
   requestor.send(JSON.stringify(data));

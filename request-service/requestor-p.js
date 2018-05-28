@@ -24,14 +24,12 @@ const send = (options) => {
       const req = requestor.connect(address);
       req.send(JSON.stringify(data));
       req.on('message', (reply) => {
-        //req.close();
+        // req.close();
         // parse to object to render 'uuid'
         const received = JSON.parse(reply.toString());
         if(! pending[received.uuid]) {
-          reject(new Error('No pending request to sync to'))
+          console.error('No pending promise resolve in queue')
         } else {
-          // resolve string version of data
-          process.stdout.write(`requestor-p: resolving: ${received}`);
           pending[received.uuid].resolve(JSON.stringify(received));
         }
       })

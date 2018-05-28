@@ -21,30 +21,34 @@ console.log(`
 const app = express();
 
 app.get('/ping', (req, res) => {
-   request.send({
-     address: zeromq_address,
-     data: {
-       action: 'ping',
-       recieved: getTime(),
-     },
-   }).then((reply) => {
-       res.send(reply)
-     })
-     .catch(console.error)
+  console.log('sending ping request');
+  request.send({
+    address: zeromq_address,
+    data: {
+      action: 'ping',
+      recieved: getTime(),
+    },
+  })
+    .then((reply) => {
+      res.send(reply)
+    })
+    .catch(console.error)
 });
 
 app.get('/increment/:number', (req, res) => {
-   request.send({
-     address: zeromq_address,
-     data:{
-       action: 'increment',
-       number: req.params.number,
-       recieved: getTime(),
-     },
-   }).then((reply) => {
-       res.send(reply)
-     })
-     .catch(console.error)
+  console.log('sending increment request');
+  request.send({
+    address: zeromq_address,
+    data:{
+      action: 'increment',
+      number: req.params.number,
+      recieved: getTime(),
+    },
+  })
+    .then((reply) => {
+      res.send(reply)
+    })
+    .catch(console.error)
 });
 
 //const server = app.listen(http_port, http_host, () => {

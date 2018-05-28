@@ -4,7 +4,7 @@
   "description": "REST Servie - makes request to zeromq, wrapped in promise",
   "main": "server2.js",
   "scripts": {
-    "start": "node ./server2.js",
+    "start": "node ./server.js",
     "server": "node ./server.js",
     "server2": "node ./server2.js"
   },

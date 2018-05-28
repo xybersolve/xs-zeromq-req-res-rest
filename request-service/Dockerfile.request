@@ -1,4 +1,4 @@
-FROM xybersolve/zeromq-base:latest
+FROM xybersolve/xs-zeromq-node-base:latest
 
 MAINTAINER Greg Milligan <xybersolve@gmail.com>
 
