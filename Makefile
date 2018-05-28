@@ -1,19 +1,16 @@
+#
+# TODO: tests
+#
 .PHONY: build up run stop down clean  delete ssh archive show ping increment help
 
 include env.mk
 include info.mk
+include check.mk
+
 # for local testing
 #HOST_IP := 127.0.0.1
 #HTTP_PORT := 8686
 VERSION := $(GIT_SHORT)
-
-# INSPECT := $$(docker-compose -p $$1 -f $$2 ps -q $$3 \
-# 	| xargs -I ARGS docker inspect -f "{{ .State.ExitCode }}" ARGS)
-#
-# CHECK := @bash -c '\
-# 	if [[ $(INSPECT) -ne 0 ]]; \
-# 	then exit $(INSPECT); fi' VALUE
-
 
 build: ## Build images: make build ver=1.2.1
 	${INFO} "Building $(PROJECT) image..."
