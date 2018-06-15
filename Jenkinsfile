@@ -1,16 +1,17 @@
 pipeline {
     agent any
     stages {
-        stage('Pre-Clean') {
-            steps {
-                cleanWs()
-                sh 'make clean || true'
-            }
-        }
 
         stage('Checkout') {
             steps {
               checkout scm
+            }
+        }
+
+        stage('Pre-Clean') {
+            steps {
+                sh 'make clean || true'
+                cleanWs()
             }
         }
 
@@ -20,11 +21,11 @@ pipeline {
             }
         }
 
-        stage('Test') {
-            steps {
-                sh 'echo "Run Tests"'
-            }
-        }
+        //stage('Test') {
+        //    steps {
+        //        sh 'echo "Run Tests"'
+        //    }
+        //}
 
         stage('Tag') {
             steps {

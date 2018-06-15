@@ -37,8 +37,8 @@ stop: ## Low level clean-up, stop containers
 
 clean: ## Low level clean-up - delete images
 	${INFO} "Hard cleanup of $(PROJECT) image..."
-	@docker image rmi zmq-http-res:latest
-	@docker image rmi zmq-http-req:latest
+	@docker image rmi zmq-http-res:latest || true
+	@docker image rmi zmq-http-req:latest || true
 
 tag:
 	${INFO} "Tag images for $(PROJECT)..."
