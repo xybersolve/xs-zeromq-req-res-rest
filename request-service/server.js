@@ -30,7 +30,8 @@ app.get('/ping', (req, res) => {
     },
   })
     .then((reply) => {
-      res.send(reply)
+      res.header('Content-Type', 'application/json');
+      res.status(200).send(reply)
     })
     .catch(console.error)
 });
@@ -46,10 +47,30 @@ app.get('/increment/:number', (req, res) => {
     },
   })
     .then((reply) => {
-      res.send(reply)
+      res.header('Content-Type', 'application/json');
+      res.status(200).send(reply)
     })
     .catch(console.error)
 });
+
+app.get('/reflect', (req, res) => {
+  const conn = req.connection;
+  const data = {
+    recieved: getTime(),
+    host: req.header.host,
+    local: {
+      address: conn.localAddress,
+      port: conn.localPort,
+    },
+    remote: {
+      address: conn.remoteAddress,
+      port: conn.remotePort,
+    }
+  }
+  res.header('Content-Type', 'application/json');
+  res.status(200).send(data);
+});
+
 
 //const server = app.listen(http_port, http_host, () => {
 const server = app.listen(http_port, () => {
