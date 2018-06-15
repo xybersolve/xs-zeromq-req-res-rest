@@ -13,7 +13,7 @@ services:
       - ZMQ_RES_ADDRESS=tcp://responder:${ZMQ_PORT}
       - HTTP_PORT=${HTTP_PORT}
     networks:
-      - zeromq-http-req-res
+      - zmq-http-req-res
 
   responder:
     command: npm start
@@ -29,8 +29,8 @@ services:
       - ZMQ_REQ_ADDRESS=tcp://*:${ZMQ_PORT}
       - ZMQ_PORT=${ZMQ_PORT}
     networks:
-      - zeromq-http-req-res
+      - zmq-http-req-res
 
 networks:
-  zeromq-http-req-res:
+  zmq-http-req-res:
     driver: bridge

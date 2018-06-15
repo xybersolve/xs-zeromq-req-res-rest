@@ -1,38 +1,59 @@
 #
 # TODO: tests
 #
-.PHONY: build up run stop down clean  delete ssh archive show ping increment help
+.PHONY: deploy build up run tag login push stop down clean  delete ssh archive show ping increment help
 
 include env.mk
 include info.mk
 include check.mk
+
+user := ${DOCKER_USER}
+pass := ${DOCKER_PASS}
 
 # for local testing
 #HOST_IP := 127.0.0.1
 #HTTP_PORT := 8686
 VERSION := $(GIT_SHORT)
 
+# the complete build to push cycle
+deploy: clean build tag login push
+
 build: ## Build images: make build ver=1.2.1
 	${INFO} "Building $(PROJECT) image..."
 	@docker-compose -p $(PROJECT) build
 
 up: ## Run requestor & responder in live mode
-	${INFO} "Starting $(PROJECT), with 'up'..."``
+	${INFO} "Starting $(PROJECT), with 'up'..."
 	@docker-compose -p $(PROJECT) up
 
 run: ## Run requestor & responder in daemon mode
-	${INFO} "Running $(PROJECT), in daemon mode..."
+	${INFO} "Running $(PROJECT), with 'up -d', in daemon mode..."
 	@docker-compose -p $(PROJECT) up -d
 
 stop: ## Low level clean-up, stop containers
 	${INFO} "Hard stop of $(PROJECT) containers..."
-	@docker stop zeromq-http-responder
-	@docker stop zeromq-http-requestor
+	@docker stop zmq-http-res
+	@docker stop zmq-http-req
 
 clean: ## Low level clean-up - delete images
 	${INFO} "Hard cleanup of $(PROJECT) image..."
-	@docker image rmi zeromq-http-responder:$(VERSION)
-	@docker image rmi zeromq-http-requestor:$(VERSION)
+	@docker image rmi zmq-http-res:latest
+	@docker image rmi zmq-http-req:latest
+
+tag:
+	${INFO} "Tag images for $(PROJECT)..."
+	@docker tag zmq-http-res $(ORG)/zmq-http-res:latest
+	@docker tag zmq-http-req $(ORG)/zmq-http-req:latest
+
+login: ## Login to docker hub
+	${INFO} "Logging into DockerHub..."
+	# from terminal or Jenkins Credentials
+	@docker login -u $(user) -p $(pass)
+
+push: login ## Push to DockerHub, requires prior login
+	${INFO} "Push to DockerHub"
+	@docker push $(ORG)/zmq-http-res:latest
+	@docker push $(ORG)/zmq-http-req:latest
 
 down: ## Clean up requestor & server
 	${INFO} "Taking 'down' $(PROJECT)..."

@@ -2,7 +2,7 @@
 # Project Specifics
 #
 ORG := xybersolve
-PROJECT := xs-zeromq-request-response-rest
+PROJECT := xs-zmq-req-res-rest
 
 HOST_NAME := $(shell docker-machine active)
 HOST_IP := $(shell docker-machine ip $(HOST_NAME))
