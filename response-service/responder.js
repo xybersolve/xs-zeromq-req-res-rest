@@ -13,7 +13,7 @@ let req = {};
 let res = {};
 
 const randomWorkTime = () => {
-  let workTime = randomInt(50, 250);
+  let workTime = randomInt(500, 1500);
   console.log(`workTime: ${workTime}`);
   return workTime;
 }
@@ -33,12 +33,16 @@ responder.on('message', (request) => {
     default:
       console.error(`Error: Unknown action: ${work.action}`)
   }
+
+  work.completed = getTime();
+  responder.send(JSON.stringify(work));
   // emulate some work time
-  setTimeout(() => {
-    // stamp work 'completed'
-    work.completed = getTime();
-    responder.send(JSON.stringify(work));
-  }, randomWorkTime());
+  // if a real work effort is to be simulated
+  // setTimeout(() => {
+  //   // stamp work 'completed'
+  //   work.completed = getTime();
+  //   responder.send(JSON.stringify(work));
+  // }, randomWorkTime());
 });
 
 responder.bind(address, (err) => {
