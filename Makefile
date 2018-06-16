@@ -8,8 +8,8 @@ include env.mk
 include info.mk
 include check.mk
 
-user := ${DOCKER_USER}
-pass := ${DOCKER_PASS}
+#user := ${DOCKER_USER}
+#pass := ${DOCKER_PASS}
 
 # for local testing
 #HOST_IP := 127.0.0.1
