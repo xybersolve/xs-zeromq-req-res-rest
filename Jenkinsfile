@@ -2,18 +2,19 @@ pipeline {
     agent any
     stages {
 
-        stage('Checkout') {
-            steps {
-              checkout scm
-            }
-        }
-
         stage('Pre-Clean') {
             steps {
                 sh 'make clean || true'
                 cleanWs()
             }
         }
+
+        stage('Checkout') {
+            steps {
+              checkout scm
+            }
+        }
+
 
         stage('Build') {
             steps {

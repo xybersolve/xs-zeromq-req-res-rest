@@ -1,7 +1,7 @@
 #
 # TODO: tests
 #
-.PHONY: deploy build up run tag login push stop down clean  delete ssh archive show ping increment help
+.PHONY: deploy clean build up run tag login push stop down clean  delete ssh archive show ping increment help
 
 include env.mk
 include info.mk
