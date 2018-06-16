@@ -32,8 +32,8 @@ clean: ## Low level clean-up - delete images, Jenkins - docker only
 
 build: ## Build images: make build ver=1.2.1, Jenkins - docker only
 	${INFO} "Building images..."
-	@docker build --tag zmq-http-res --file ./Dockerfile.response ./response-service
-	@docker build --tag zmq-http-req --file ./Dockerfile.request ./request-service
+	@docker build --tag zmq-http-res --file ./response-service/Dockerfile ./response-service
+	@docker build --tag zmq-http-req --file ./request-service/Dockerfile ./request-service
 	#@docker-compose -p $(PROJECT) build
 
 test:
