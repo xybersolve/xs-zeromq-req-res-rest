@@ -1,7 +1,8 @@
 #
 # TODO: tests
 #
-.PHONY: deploy clean build up run tag login push stop down clean  delete ssh archive show ping increment help
+.PHONY: deploy clean build test tag login push \
+		up run stop down clean delete ssh archive show ping increment help
 
 include env.mk
 include info.mk
@@ -16,12 +17,46 @@ pass := ${DOCKER_PASS}
 VERSION := $(GIT_SHORT)
 
 # the complete build to push cycle
-deploy: clean build tag login push
+deploy: clean build test tag login push
+#
+# -------------------------------------------
+# Jenkins routines start here
+#   * docker only Jenkins routines
+#
+clean: ## Low level clean-up - delete images, Jenkins - docker only
+	${INFO} "Hard cleanup of containers & images..."
+	@docker container rm zmq-http-res || true
+	@docker container rm zmq-http-req || true
+	@docker image rm zmq-http-res:latest || true
+	@docker image rm zmq-http-req:latest || true
 
-build: ## Build images: make build ver=1.2.1
-	${INFO} "Building $(PROJECT) image..."
-	@docker-compose -p $(PROJECT) build
+build: ## Build images: make build ver=1.2.1, Jenkins - docker only
+	${INFO} "Building images..."
+	@docker build --tag zmq-http-res --file ./Dockerfile.response ./response-service
+	@docker build --tag zmq-http-req --file ./Dockerfile.request ./request-service
+	#@docker-compose -p $(PROJECT) build
 
+test:
+	echo "Unit & smoke tests go here..."
+
+tag: ## Tag images, Jenkins - docker only
+	${INFO} "Tag images..."
+	@docker tag zmq-http-res $(ORG)/zmq-http-res:latest
+	@docker tag zmq-http-req $(ORG)/zmq-http-req:latest
+
+login: ## Login to docker hub
+	${INFO} "Logging into DockerHub..."
+	# from terminal or Jenkins Credentials
+	@docker login -u $(user) -p $(pass)
+
+push: login ## Push to DockerHub, requires prior login, Jenkins docker only
+	${INFO} "Push to DockerHub"
+	@docker push $(ORG)/zmq-http-res:latest
+	@docker push $(ORG)/zmq-http-req:latest
+#
+# Jenkins routines end here
+# -------------------------------------------
+#
 up: ## Run requestor & responder in live mode
 	${INFO} "Starting $(PROJECT), with 'up'..."
 	@docker-compose -p $(PROJECT) up
@@ -34,26 +69,6 @@ stop: ## Low level clean-up, stop containers
 	${INFO} "Hard stop of $(PROJECT) containers..."
 	@docker stop zmq-http-res
 	@docker stop zmq-http-req
-
-clean: ## Low level clean-up - delete images
-	${INFO} "Hard cleanup of $(PROJECT) image..."
-	@docker image rmi zmq-http-res:latest || true
-	@docker image rmi zmq-http-req:latest || true
-
-tag:
-	${INFO} "Tag images for $(PROJECT)..."
-	@docker tag zmq-http-res $(ORG)/zmq-http-res:latest
-	@docker tag zmq-http-req $(ORG)/zmq-http-req:latest
-
-login: ## Login to docker hub
-	${INFO} "Logging into DockerHub..."
-	# from terminal or Jenkins Credentials
-	@docker login -u $(user) -p $(pass)
-
-push: login ## Push to DockerHub, requires prior login
-	${INFO} "Push to DockerHub"
-	@docker push $(ORG)/zmq-http-res:latest
-	@docker push $(ORG)/zmq-http-req:latest
 
 down: ## Clean up requestor & server
 	${INFO} "Taking 'down' $(PROJECT)..."

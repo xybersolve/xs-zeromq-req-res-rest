@@ -22,11 +22,11 @@ pipeline {
             }
         }
 
-        //stage('Test') {
-        //    steps {
-        //        sh 'echo "Run Tests"'
-        //    }
-        //}
+        stage('Test') {
+            steps {
+                sh 'make test'
+            }
+        }
 
         stage('Tag') {
             steps {
