@@ -3,6 +3,7 @@
 //   - queue the promise 'resolve' in 'pending', sync reply on 'message'
 //   - reusable in other microservices
 //
+const name = 'requestor';
 const express = require('express');
 const request = require('./requestor-p');
 const { randomInt, getTime } = require('./helpers');
@@ -76,5 +77,5 @@ app.get('/reflect', (req, res) => {
 const server = app.listen(http_port, () => {
    const host = server.address().address;
    const port = server.address().port;
-   console.log(`Request-Response Server, listening: http://${host}:${port}`);
+   console.log(`${name}, listening: http://${host}:${port}`);
 });

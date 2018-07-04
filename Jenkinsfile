@@ -33,13 +33,11 @@ pipeline {
                 sh 'make tag'
             }
         }
-
-        stage('Docker Push') {
+        stage('Push to DockerHub') {
           steps {
-            // Jenkins withCredentials and make
-            withCredentials([usernamePassword(credentialsId: 'dockerHub', passwordVariable: 'dockerHubPassword', usernameVariable: 'dockerHubUser')]) {
-              sh "make login user=${env.dockerHubUser} pass=${env.dockerHubPassword}"
-              sh 'make push'
+            withCredentials([usernamePassword(credentialsId: 'docker-hub-credentials', passwordVariable: 'pass', usernameVariable: 'user')]) {
+              sh "make login user=${user} pass=${pass}"
+              sh 'make push-web'
             }
           }
         }

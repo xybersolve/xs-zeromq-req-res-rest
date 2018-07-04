@@ -1,36 +1,64 @@
-version: '2'
+version: '3.1'
+#
+#  Expects in /etc/hosts
+#   swarm.io  manager_ip
+#
+networks:
+  traefik-net:
+    external: true
+  zmq-net:
+    external: false
+
 services:
   requestor:
+    image: xybersolve/zmq-http-req:latest
     command: npm start
-    build:
-      context: ./request-service
-      dockerfile: Dockerfile.request
-    image: ${REQUEST_IMAGE}:${VERSION}
-    container_name: ${REQUEST_CONTAINER}
-    ports:
-      - "${HTTP_PORT}:${HTTP_PORT}"
+    # not needed with trafik endpoint
+    #ports: ["8686:8686"]
     environment:
-      - ZMQ_RES_ADDRESS=tcp://responder:${ZMQ_PORT}
-      - HTTP_PORT=${HTTP_PORT}
+      ZMQ_RES_ADDRESS: tcp://responder:8672
+      HTTP_PORT: "8686"
     networks:
-      - zmq-http-req-res
+    - traefik-net
+    - zmq-net
+    deploy:
+      replicas: 2
+      placement:
+        constraints: [node.role == worker]
+      update_config:
+        parallelism: 1
+        delay: 2s
+      restart_policy:
+        condition: on-failure
+      labels:
+      - traefik.domain=swarm.io
+      - traefik.frontend.rule=Host:swarm.xybersolve.io;PathPrefixStrip:/api/v1;PathPrefix:/api/v1
+      - traefik.entryPoints=http
+      - traefik.backend=requestor
+      - traefik.docker.network=traefik-net
+      - traefik.port=8686
+      - traefik.enable=true
+    # inconsistent acceptance of '/v1' portion of endpoint
+    # healthcheck:
+    #   test: ["CMD", "curl", "-f", "http://swarm.io/api/v1/ping"]
+    #   interval: 1m
+    #   timeout: 5s
+    #   retries: 3
 
   responder:
+    image: xybersolve/zmq-http-res:latest
     command: npm start
-    build:
-      context: ./response-service
-      dockerfile: Dockerfile.response
-    image: ${RESPONSE_IMAGE}:${VERSION}
-    #image: ${RESPONSE_IMAGE}:${GITHASH}
-    container_name: ${RESPONSE_CONTAINER}
-    ports:
-      - "${ZMQ_PORT}:${ZMQ_PORT}"
     environment:
-      - ZMQ_REQ_ADDRESS=tcp://*:${ZMQ_PORT}
-      - ZMQ_PORT=${ZMQ_PORT}
+      ZMQ_REQ_ADDRESS: "tcp://*:8672"
+      ZMQ_PORT: "8672"
     networks:
-      - zmq-http-req-res
-
-networks:
-  zmq-http-req-res:
-    driver: bridge
+    - zmq-net
+    deploy:
+      replicas: 2
+      placement:
+        constraints: [node.role == worker]
+      update_config:
+        parallelism: 1
+        delay: 2s
+      restart_policy:
+        condition: on-failure

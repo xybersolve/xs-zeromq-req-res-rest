@@ -3,6 +3,7 @@
 //    - responds to requesting client
 //    - REP socket to tcp://*:8672
 //
+const name = 'responder';
 const responder = require('zeromq').socket('rep');
 const { randomInt, getTime } = require('./helpers');
 const workTime = 1000;
@@ -47,7 +48,7 @@ responder.on('message', (request) => {
 
 responder.bind(address, (err) => {
   if (err) return console.error(err);
-  console.log(`responder, binds on: ${address}`);
+  console.log(`${name}, binds on: ${address}`);
 });
 
 process.on('SIGINT', () => {

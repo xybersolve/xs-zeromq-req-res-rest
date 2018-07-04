@@ -3,6 +3,7 @@
 //  - queue express 'response' for zmq reply. on 'message'
 //  - not reusable - in-code solution - must be implmented by each service
 //
+const name = 'requestor';
 const express = require('express');
 const zmq = require('zeromq');
 const randUUID = require('uuid/v4'); // random
@@ -68,7 +69,7 @@ app.get('/increment/:number', (req, res) => {
 const server = app.listen(http_port, () => {
   const host = server.address().address;
   const port = server.address().port;
-  console.log(`Request-Response Web Server, listening: http://${host}:${port}`);
+  console.log(`${name}, listening: http://${host}:${port}`);
 })
 
 process.on('SIGINT', () => {
