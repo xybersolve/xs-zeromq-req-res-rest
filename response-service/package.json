@@ -7,6 +7,10 @@
     "start": "node ./responder.js",
     "respond": "node ./responder.js"
   },
+  "repository": {
+    "type": "git",
+    "url": "git:@github.com:xybersolve/xs-zeromq-req-res-rest.git"
+  },
   "author": "Greg Milligan <xybersolve@gmail.com>",
   "license": "MIT",
   "dependencies": {
