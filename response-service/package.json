@@ -9,7 +9,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git:@github.com:xybersolve/xs-zeromq-req-res-rest.git"
+    "url": "git://github.com:xybersolve/xs-zeromq-req-res-rest.git"
   },
   "author": "Greg Milligan <xybersolve@gmail.com>",
   "license": "MIT",
