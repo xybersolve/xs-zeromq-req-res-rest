@@ -20,7 +20,7 @@ VERSION := $(GIT_SHORT)
 deploy: clean build test tag login push
 #
 # -------------------------------------------
-# Jenkins routines start here
+# CI routines start here
 #   * docker only Jenkins routines
 #
 clean: ## Low level clean-up - delete images, Jenkins - docker only
@@ -54,7 +54,7 @@ push: login ## Push to DockerHub, requires prior login, Jenkins docker only
 	@docker push $(ORG)/zmq-http-res:latest
 	@docker push $(ORG)/zmq-http-req:latest
 #
-# Jenkins routines end here
+# Support routines below
 # -------------------------------------------
 #
 up: ## Run requestor & responder in live mode
