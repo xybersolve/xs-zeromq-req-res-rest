@@ -1,0 +1,26 @@
+version: 2.0
+jobs:
+  deploy:
+    machine:
+      enabled: true
+    working_directory: ~/zeromq-req-res-rest
+    steps:
+    - checkout
+    - run:
+        name: Build, tag and deploy image to docker hub
+        command: |
+          # make to build, tag and deploy
+          make build
+          make tag
+          make login user=${DOCKER_USER} pass=${DOCKER_PASSWORD}
+          make push
+
+workflows:
+  version: 2
+  deploy:
+    jobs:
+    - deploy:
+        context: xs-docker
+        filters:
+          branches:
+            only: release
