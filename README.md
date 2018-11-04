@@ -4,6 +4,10 @@
 service and backend worker service using zeromq. ZeroMQ request is wrapped
 in promise, using two methods below.
 
+> CI/CD: `make` handles all build, tag and deployment routines and is equally 
+consumed by Jenkins and/or CircleCi. CircleCi being more succinct.
+Note: CircleCi is setup to only deploy on push to `release` branch.
+
 ### Two Promise Methods (reusable promise and inline):
 1) `server.js` : promise based requestor-p retains `resolve` in `pending` object,
 which syncs senders resolve on zeromq reply via `message` event. `requestor-p`
