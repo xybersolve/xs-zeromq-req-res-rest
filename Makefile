@@ -49,7 +49,7 @@ login: ## Login to docker hub
 	# from terminal or Jenkins Credentials
 	@docker login -u $(user) -p $(pass)
 
-push: login ## Push to DockerHub, requires prior login, Jenkins docker only
+push: ## Push to DockerHub, requires prior login, Jenkins docker only
 	${INFO} "Push to DockerHub"
 	@docker push $(ORG)/zmq-http-res:latest
 	@docker push $(ORG)/zmq-http-req:latest
